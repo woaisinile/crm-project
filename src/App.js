@@ -1,11 +1,16 @@
-import IndexRouter from "./router/IndexRouter";
+import Login from "./views/login/Login";
+import Home from "./views/main/home/Home";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <IndexRouter></IndexRouter>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path={'/'} element={<Login/>}/>
+        <Route path={'home'} element={<Home/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
