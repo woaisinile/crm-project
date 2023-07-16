@@ -1,13 +1,34 @@
-import React from "react";
+import React, {useState} from "react";
 import './Login.css'
 import { Button, Form, Input } from 'antd';
-
-const onFinish = (values) => {
-    console.log('Success:', values);
-};
+import {$login} from "../../api/adminApi";
+import MyNOtification from "../../components/notification/MyNOtification";
 
 export default function Login(){
     let [contentForm] = Form.useForm()
+    let [notiMsg, setNotiMsg] = useState({
+        type: '',
+        description: ''
+    })
+
+    const onFinish = async (values) => {
+        try {
+            const result = await $login(values);
+            if(result.message === '成功') {
+                setNotiMsg({
+                    type: 'success',
+                    description: result.message
+                })
+            } else {
+                setNotiMsg({
+                    type: 'error',
+                    description: result.message
+                })
+            }
+        } catch (error) {
+            console.error('Login error', error);
+        }
+    };
 
     return(
         <div className={'login'}>
@@ -76,10 +97,9 @@ export default function Login(){
                             取消
                         </Button>
                     </Form.Item>
-
                 </Form>
-
             </div>
+            <MyNOtification type={notiMsg.type} description={notiMsg.description}/>
         </div>
     )
 }
