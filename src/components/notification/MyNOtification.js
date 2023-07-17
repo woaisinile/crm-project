@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import { notification } from "antd";
 
-export default function MyNotification({ type, message, description }) {
+export default function MyNotification({notiMsg}) {
     const [api, contextHolder] = notification.useNotification();
 
     useEffect(() => {
-        if (type) {
-            api[type]({
+        if (notiMsg.type) {
+            api[notiMsg.type]({
                 message: '系统提示',
-                description
+                description: notiMsg.description
             });
         }
-    }, [type, description, api]);
+    }, [notiMsg, api]);
 
     return <>{contextHolder}</>;
 }

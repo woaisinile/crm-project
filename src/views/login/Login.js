@@ -99,7 +99,7 @@ export default function Login(){
                     </Form.Item>
                 </Form>
             </div>
-            <MyNOtification type={notiMsg.type} description={notiMsg.description}/>
+            <MyNOtification notiMsg={notiMsg}/>
         </div>
     )
 }
