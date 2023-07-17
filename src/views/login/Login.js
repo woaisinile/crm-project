@@ -1,15 +1,20 @@
 import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import './Login.css'
 import { Button, Form, Input } from 'antd';
 import {$login} from "../../api/adminApi";
 import MyNOtification from "../../components/notification/MyNOtification";
 
 export default function Login(){
+    // 表单
     let [contentForm] = Form.useForm()
+    // 通知框
     let [notiMsg, setNotiMsg] = useState({
         type: '',
         description: ''
     })
+    // 导航
+    let navigate = useNavigate();
 
     const onFinish = async (values) => {
         try {
@@ -19,6 +24,7 @@ export default function Login(){
                     type: 'success',
                     description: result.message
                 })
+
             } else {
                 setNotiMsg({
                     type: 'error',
