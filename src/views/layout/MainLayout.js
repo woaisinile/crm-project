@@ -7,6 +7,7 @@ import {
     VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
+import './MainLayout.css'
 
 const { Header, Sider, Content } = Layout;
 
@@ -17,9 +18,10 @@ const MainLayout: React.FC = () => {
     } = theme.useToken();
 
     return (
-        <Layout>
+        <Layout className={'mainLayout'}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="demo-logo-vertical" />
+                <div className={'logo'}>{collapsed ? 'crm' : 'crm客户关系管理系统'}</div>
                 <Menu
                     theme="dark"
                     mode="inline"
