@@ -127,7 +127,7 @@ const MainLayout: React.FC = () => {
                                 height: 64,
                             }}
                         />
-                        <Menu selectedKeys={[current]} mode="horizontal" items={items} />
+                        <Menu className={"menu"} selectedKeys={[current]} mode="horizontal" items={items} />
                     </div>
                 </Header>
                 <Content
