@@ -6,12 +6,12 @@ import {
     UploadOutlined,
     UserOutlined,
     VideoCameraOutlined,
-    AppstoreOutlined,
     MailOutlined,
-    SettingOutlined
+    SettingOutlined, WindowsFilled
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import './MainLayout.css'
+import {useNavigate} from 'react-router-dom'
 
 const {
     Header,
@@ -29,7 +29,7 @@ const items = [
     {
         label: '房子',
         key: 'app',
-        icon: <AppstoreOutlined />,
+        icon: <WindowsFilled />,
     },
     {
         label: '通讯录',
@@ -74,6 +74,11 @@ const items = [
         ),
         key: 'alipay',
     },
+    {
+        key: 'exit',
+        icon: <UserOutlined />,
+        label: '退出',
+    },
 ];
 const leftItems = [
     {
@@ -110,10 +115,11 @@ const leftItems = [
         key: '3',
         icon: <UploadOutlined />,
         label: '上传下载',
-    },
+    }
 ]
 
 const MainLayout: React.FC = () => {
+    const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
@@ -124,6 +130,13 @@ const MainLayout: React.FC = () => {
 
     const clickMenu = (e) => {
         setCurrent(e.key)
+        switch (e.key){
+            case 'exit':
+                sessionStorage.clear();
+                localStorage.clear();
+                navigate('/')
+                break
+        }
     }
 
     return (
