@@ -1,0 +1,5 @@
+/* styles.css */
+.button-container {
+    display: flex;
+    gap: 20px; /* 设置按钮之间的间隔，可以根据需要调整值 */
+}

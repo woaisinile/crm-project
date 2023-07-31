@@ -82,19 +82,9 @@ const items = [
 ];
 const leftItems = [
     {
-        key: '1',
+        key: 'marketActivity',
         icon: <UserOutlined />,
-        label: '客户管理',
-        children: [
-            {
-                key: 'change',
-                label: '客户大壮'
-            },
-            {
-                key: '1-2',
-                label: '客户小壮'
-            }
-        ]
+        label: '市场活动',
     },
     {
         key: '2',
@@ -131,13 +121,16 @@ const MainLayout: React.FC = () => {
     const clickMenu = (e) => {
         setCurrent(e.key)
         switch (e.key){
-            case 'change':
-                navigate('/main-role')
+            case 'marketActivity':
+                debugger
+                navigate('/market-activity')
                 break
             case 'exit':
                 sessionStorage.clear();
                 localStorage.clear();
                 navigate('/')
+                break
+            default:
                 break
         }
     }
@@ -150,7 +143,7 @@ const MainLayout: React.FC = () => {
                 <Menu
                     theme="dark"
                     mode="inline"
-                    defaultSelectedKeys={['1']}
+                    onClick={clickMenu}
                     items={leftItems}
                 />
             </Sider>
@@ -179,7 +172,7 @@ const MainLayout: React.FC = () => {
                     }}
                 >
                     Content
-                    <Link to="/main-layout/main-role">Go to Main Role</Link>
+                    <Link to="/main-role">Go to Main Role</Link>
                 </Content>
             </Layout>
         </Layout>

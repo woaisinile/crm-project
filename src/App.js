@@ -3,15 +3,15 @@ import Login from "./views/login/Login";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import './App.css';
 import MainLayout from "./views/layout/MainLayout";
-import MainRole from "./views/mainRole/MainRole"
+import MarketActivity from "./views/marketActivity/MarketActivity"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={'/'} element={<Login/>}/>
+          <Route path={'/'} element={<Login/>}/>
           <Route path={'main-layout'} element={<MainLayout/>}/>
-          <Route path={'main-role'} element={<MainRole/>} />
+          <Route path={'market-activity'} element={<MarketActivity/>} />
       </Routes>
     </BrowserRouter>
   );
