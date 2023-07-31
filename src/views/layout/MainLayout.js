@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import './MainLayout.css'
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 const {
     Header,
@@ -42,7 +42,7 @@ const items = [
                 children: [
                     {
                         label: '大王',
-                        key: 'setting:1',
+                        key: 'bowing',
                     },
                     {
                         label: '小王',
@@ -87,7 +87,7 @@ const leftItems = [
         label: '客户管理',
         children: [
             {
-                key: '1-1',
+                key: 'change',
                 label: '客户大壮'
             },
             {
@@ -131,6 +131,9 @@ const MainLayout: React.FC = () => {
     const clickMenu = (e) => {
         setCurrent(e.key)
         switch (e.key){
+            case 'change':
+                navigate('/main-role')
+                break
             case 'exit':
                 sessionStorage.clear();
                 localStorage.clear();
@@ -176,6 +179,7 @@ const MainLayout: React.FC = () => {
                     }}
                 >
                     Content
+                    <Link to="/main-layout/main-role">Go to Main Role</Link>
                 </Content>
             </Layout>
         </Layout>
