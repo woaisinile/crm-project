@@ -122,7 +122,6 @@ const MainLayout: React.FC = () => {
         setCurrent(e.key)
         switch (e.key){
             case 'marketActivity':
-                debugger
                 navigate('/market-activity')
                 break
             case 'exit':
@@ -171,8 +170,7 @@ const MainLayout: React.FC = () => {
                         background: colorBgContainer,
                     }}
                 >
-                    Content
-                    <Link to="/main-role">Go to Main Role</Link>
+                    主页面内容
                 </Content>
             </Layout>
         </Layout>
