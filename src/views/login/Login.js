@@ -57,7 +57,7 @@ export default function Login(){
                 >
                     <Form.Item
                         label="用户名"
-                        name="username"
+                        name="loginAct"
                         rules={[
                             {
                                 required: true,
@@ -70,7 +70,7 @@ export default function Login(){
 
                     <Form.Item
                         label="密码"
-                        name="password"
+                        name="loginPwd"
                         rules={[
                             {
                                 required: true,
