@@ -4,7 +4,7 @@ import './MarketActivity.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/locale/zh_CN';
 import {$queryAllUsers} from "../../api/adminApi";
-import {$insertActivity} from "../../api/activityApi";
+import {$insertActivity, $qryActivityPage} from "../../api/activityApi";
 import MyNOtification from "../../components/notification/MyNOtification";
 
 const MarketActivity = () => {
@@ -61,8 +61,21 @@ const MarketActivity = () => {
         } )
     },[])
 
-    const onFinish = (values) => {
-        console.log(values)
+    const onFinish = async (values) => {
+        values.pageNo = '1'
+        values.pageSize = '5'
+        const result = await $qryActivityPage(values)
+        if(result.message === '成功') {
+            setNotiMsg({
+                type: 'success',
+                description: '查询成功'
+            })
+        } else {
+            setNotiMsg({
+                type: 'error',
+                description: '查询失败'
+            })
+        }
     }
 
     const onCreateFinish = (values) => {
@@ -102,31 +115,28 @@ const MarketActivity = () => {
                     </Form.Item>
 
                     <Form.Item
-                        name="gender"
+                        name="owner"
                         label="所有者"
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item
-                        name="gender"
+                        name="startDate"
                         label="开始日期"
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item
-                        name="gender"
+                        name="endDate"
                         label="结束日期"
                     >
                         <Input />
                     </Form.Item>
 
-                    <Form.Item
-                        name="gender"
-                        label="查询"
-                    >
-                        <Input />
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit"> 查询</Button>
                     </Form.Item>
                 </Form>
 
