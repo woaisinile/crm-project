@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, Table} from "antd";
+import {Button, ConfigProvider, DatePicker, Form, Input, Modal, Pagination, Select, Table} from "antd";
 import './MarketActivity.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/locale/zh_CN';
@@ -23,6 +23,11 @@ const MarketActivity = () => {
         type: '',
         description: ''
     })
+    // column的数据
+    const [activityData, setActivityData] = useState([])
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [totalActivity, setTotalActivity] = useState(0)
 
     const columns = [
         {
@@ -32,18 +37,18 @@ const MarketActivity = () => {
         },
         {
             title: '所有者',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'owner',
+            key: 'owner',
         },
         {
             title: '开始日期',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'startDate',
+            key: 'startDate',
         },
         {
             title: '结束日期',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'endDate',
+            key: 'endDate',
         },
     ]
 
@@ -61,11 +66,20 @@ const MarketActivity = () => {
         } )
     },[])
 
-    const onFinish = async (values) => {
-        values.pageNo = '1'
-        values.pageSize = '5'
-        const result = await $qryActivityPage(values)
+    const onFinish = async () => {
+        await activityPagination()
+    }
+
+    const activityPagination = async (page, pageSize) => {
+        setCurrentPage(page)
+        setPageSize(pageSize)
+        const qryObj = form.getFieldsValue();
+        qryObj.pageNo = page
+        qryObj.pageSize = pageSize
+
+        const result = await $qryActivityPage(qryObj)
         if(result.message === '成功') {
+            setActivityData(result.data.activityPage)
             setNotiMsg({
                 type: 'success',
                 description: '查询成功'
@@ -169,7 +183,9 @@ const MarketActivity = () => {
 
                 <div>
                     <br></br>
-                    <Table columns={columns}/>
+                    <Table columns={columns} dataSource={activityData} pagination={false}/>
+                    <Pagination current={currentPage} total={totalActivity} pageSize={pageSize}
+                                onChange={activityPagination} />
                 </div>
 
                 <Modal title={'创建市场活动'} open={isCreateOpen} onCancel={handleCreateCancel} footer={null}>
@@ -182,7 +198,7 @@ const MarketActivity = () => {
                                        }
                                    ]}
                         >
-                            <Select style={{width: 120}} options={allUsers} />
+                            <Select style={{width: 120}} options={allUsers} defaultValue={'李四'}/>
                         </Form.Item>
                         <Form.Item name='name' label={'名称'}
                                    rules={[
