@@ -68,7 +68,7 @@ const MarketActivity = () => {
     },[])
 
     const onFinish = async () => {
-        await activityPagination()
+        await activityPagination(1, 10)
 
     }
 
