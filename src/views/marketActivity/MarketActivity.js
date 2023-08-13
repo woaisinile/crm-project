@@ -69,7 +69,6 @@ const MarketActivity = () => {
 
     const onFinish = async () => {
         await activityPagination(1, 10)
-
     }
 
     // 分页查询函数，这个是提取出来的
