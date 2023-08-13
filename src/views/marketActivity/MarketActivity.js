@@ -27,7 +27,8 @@ const MarketActivity = () => {
     const [activityData, setActivityData] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [totalActivity, setTotalActivity] = useState(0)
+    const [totalActivity, setTotalActivity] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     const columns = [
         {
@@ -66,31 +67,14 @@ const MarketActivity = () => {
         } )
     },[])
 
-    const onFinish = async (values) => {
-        values.pageNo = currentPage;
-        values.pageSize = pageSize;
-
-        console.log('values', values)
-        debugger
-        const result = await $qryActivityPage(values)
-        if(result.message === '成功') {
-            setActivityData(result.data.activityPage)
-            setNotiMsg({
-                type: 'success',
-                description: '查询成功'
-            })
-        } else {
-            setNotiMsg({
-                type: 'error',
-                description: '查询失败'
-            })
-        }
+    const onFinish = async () => {
+        await activityPagination()
 
     }
 
-    const activityPagination = async (page, pageSize) => {
-        setCurrentPage(page)
-        setPageSize(pageSize)
+    // 分页查询函数，这个是提取出来的
+    const activityPagination = async (page = 1, pageSize = 10) => {
+        setLoading(true)
         const qryObj = form.getFieldsValue();
         qryObj.pageNo = currentPage
         qryObj.pageSize = pageSize
@@ -98,6 +82,9 @@ const MarketActivity = () => {
         const result = await $qryActivityPage(qryObj)
         if(result.message === '成功') {
             setActivityData(result.data.activityPage)
+            setCurrentPage(page)
+            setPageSize(pageSize)
+            setTotalActivity(result.data.activityPageCount)
             setNotiMsg({
                 type: 'success',
                 description: '查询成功'
@@ -108,6 +95,7 @@ const MarketActivity = () => {
                 description: '查询失败'
             })
         }
+        setLoading(false)
     }
 
     const onCreateFinish = (values) => {
@@ -139,9 +127,12 @@ const MarketActivity = () => {
         owner: "06f5fc056eac41558a964f96daa7f27c", // "33" 对应张三的 value
     };
 
-
     if (isCreateOpen) {
         createForm.setFieldsValue(initialFormValues);
+    }
+
+    const handleActivityPagination = (page, pageSize) => {
+        activityPagination(page, pageSize)
     }
 
     return (
@@ -211,9 +202,13 @@ const MarketActivity = () => {
 
                 <div>
                     <br></br>
-                    <Table columns={columns} dataSource={activityData} pagination={false}/>
-                    <Pagination current={currentPage} total={totalActivity} pageSize={pageSize}
-                                onChange={activityPagination} />
+                    <Table columns={columns} dataSource={activityData} pagination={false} loading={loading}/>
+                    <Pagination
+                        current={currentPage}
+                        total={totalActivity}
+                        pageSize={pageSize}
+                        onChange={handleActivityPagination}
+                    />
                 </div>
 
                 <Modal title={'创建市场活动'} open={isCreateOpen} onCancel={handleCreateCancel} footer={null}>
