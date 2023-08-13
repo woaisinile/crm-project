@@ -59,22 +59,40 @@ const MarketActivity = () => {
             r.data.map((item) => {
                 let newObj = {}
                 newObj.label = item.name
-                newObj.value = item.name
+                newObj.value = item.id
                 newRows.push(newObj)
             })
             setAllUsers(newRows)
         } )
     },[])
 
-    const onFinish = async () => {
-        await activityPagination()
+    const onFinish = async (values) => {
+        values.pageNo = currentPage;
+        values.pageSize = pageSize;
+
+        console.log('values', values)
+        debugger
+        const result = await $qryActivityPage(values)
+        if(result.message === '成功') {
+            setActivityData(result.data.activityPage)
+            setNotiMsg({
+                type: 'success',
+                description: '查询成功'
+            })
+        } else {
+            setNotiMsg({
+                type: 'error',
+                description: '查询失败'
+            })
+        }
+
     }
 
     const activityPagination = async (page, pageSize) => {
         setCurrentPage(page)
         setPageSize(pageSize)
         const qryObj = form.getFieldsValue();
-        qryObj.pageNo = page
+        qryObj.pageNo = currentPage
         qryObj.pageSize = pageSize
 
         const result = await $qryActivityPage(qryObj)
@@ -114,6 +132,16 @@ const MarketActivity = () => {
 
     const showCreateModal = () => {
         setIsCreateOpen(true)
+    }
+
+    // 设置初始值，例如默认选择 "张三"
+    const initialFormValues = {
+        owner: "06f5fc056eac41558a964f96daa7f27c", // "33" 对应张三的 value
+    };
+
+
+    if (isCreateOpen) {
+        createForm.setFieldsValue(initialFormValues);
     }
 
     return (
@@ -198,7 +226,7 @@ const MarketActivity = () => {
                                        }
                                    ]}
                         >
-                            <Select style={{width: 120}} options={allUsers} defaultValue={'李四'}/>
+                            <Select style={{width: 120}} options={allUsers}/>
                         </Form.Item>
                         <Form.Item name='name' label={'名称'}
                                    rules={[
