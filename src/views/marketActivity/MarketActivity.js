@@ -29,6 +29,7 @@ const MarketActivity = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalActivity, setTotalActivity] = useState(0);
     const [loading, setLoading] = useState(false);
+    const selectionType = 'radio'
 
     const columns = [
         {
@@ -80,6 +81,9 @@ const MarketActivity = () => {
 
         const result = await $qryActivityPage(qryObj)
         if(result.message === '成功') {
+            result.data.activityPage.map((item) => {
+                item.key = item.id
+            })
             setActivityData(result.data.activityPage)
             setCurrentPage(page)
             setPageSize(pageSize)
@@ -133,6 +137,17 @@ const MarketActivity = () => {
     const handleActivityPagination = (page, pageSize) => {
         activityPagination(page, pageSize)
     }
+
+    const rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+        getCheckboxProps: (record) => ({
+            disabled: record.name === 'Disabled User',
+            // Column configuration not to be checked
+            name: record.name,
+        }),
+    };
 
     return (
         <ConfigProvider locale={locale}>
@@ -201,7 +216,16 @@ const MarketActivity = () => {
 
                 <div>
                     <br></br>
-                    <Table columns={columns} dataSource={activityData} pagination={false} loading={loading}/>
+                    <Table
+                        rowSelection={{
+                            type: selectionType,
+                            ...rowSelection,
+                        }}
+                        columns={columns}
+                        dataSource={activityData}
+                        pagination={false}
+                        loading={loading}
+                    />
                     <Pagination
                         current={currentPage}
                         total={totalActivity}
