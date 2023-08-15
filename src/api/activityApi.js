@@ -9,3 +9,8 @@ export const $qryActivityPage = async (qryMap) => {
     let {data} = await axios.post('qryActivityPage', qryMap)
     return data;
 }
+
+export const $updateActivity = async (updateInfo) => {
+    let {data} = await axios.post('updateActivity', updateInfo)
+    return data
+}

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Button, DatePicker, Form, Input, message, Modal, Select} from "antd";
 import MyNOtification from "../../components/notification/MyNOtification";
+import {$updateActivity} from "../../api/activityApi";
 
 function UpdateActivityModal(props){
 
@@ -12,9 +13,10 @@ function UpdateActivityModal(props){
         description: ''
     })
 
-    const onUpdateFinish = (values) => {
+    const onUpdateFinish = async (values) => {
+        values.id = props.selectReord[0].id
         console.log(values)
-        return null
+        const result = $updateActivity(values)
     }
 
     useEffect(() => {
@@ -24,6 +26,7 @@ function UpdateActivityModal(props){
         }
         const initialForm = props.selectReord[0]
         form.setFieldsValue(initialForm)
+        form.setFieldsValue({owner: initialForm.ownerId})
     },)
 
     return(
