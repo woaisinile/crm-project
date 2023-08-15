@@ -6,6 +6,7 @@ import locale from 'antd/es/locale/zh_CN';
 import {$queryAllUsers} from "../../api/adminApi";
 import {$insertActivity, $qryActivityPage} from "../../api/activityApi";
 import MyNOtification from "../../components/notification/MyNOtification";
+import UpdateActivityModal from "./UpdateActivityModal";
 
 const MarketActivity = () => {
 
@@ -14,6 +15,8 @@ const MarketActivity = () => {
     // 创建市场活动弹窗使用的表单
     const [createForm] = Form.useForm();
     const [isCreateOpen, setIsCreateOpen] = useState(false);
+    // 修改市场活动所用的表单
+    const [isUpdateOpen, setIsUpdateOpen] = useState(false);
     // 时间选择器
     const { RangePicker } = DatePicker;
     // 储存下拉列表
@@ -29,6 +32,7 @@ const MarketActivity = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalActivity, setTotalActivity] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [selectRecord, setSelectRecord] = useState([]);
     const selectionType = 'radio'
 
     const columns = [
@@ -141,8 +145,17 @@ const MarketActivity = () => {
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            setSelectRecord(selectedRows)
         }
     };
+
+    const updateModal = () => {
+        setIsUpdateOpen(true)
+    }
+
+    const closeUpdateModal = () => {
+        setIsUpdateOpen(false)
+    }
 
     return (
         <ConfigProvider locale={locale}>
@@ -188,7 +201,7 @@ const MarketActivity = () => {
                         <Button type="primary" htmlType="button" onClick={showCreateModal}>
                             创建
                         </Button>
-                        <Button type="primary" htmlType="button">
+                        <Button type="primary" htmlType="button" onClick={updateModal}>
                             修改
                         </Button>
                         <Button type="primary" htmlType="button" >
@@ -282,6 +295,13 @@ const MarketActivity = () => {
                         </Form.Item>
                     </Form>
                 </Modal>
+
+                <UpdateActivityModal
+                    isUpdateOpen={isUpdateOpen}
+                    closeUpdateModal={closeUpdateModal}
+                    allusers={allUsers}
+                    selectReord={selectRecord}
+                />
 
                 <MyNOtification notiMsg={notiMsg}/>
             </div>
