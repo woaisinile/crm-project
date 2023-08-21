@@ -26,7 +26,7 @@ function UpdateActivityModal(props){
         }
         const initialForm = props.selectReord[0]
         form.setFieldsValue(initialForm)
-        form.setFieldsValue({owner: initialForm.ownerId})
+        form.setFieldsValue({owner: initialForm?.ownerId})
     },)
 
     return(
