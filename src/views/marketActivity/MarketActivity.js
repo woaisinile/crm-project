@@ -4,7 +4,7 @@ import './MarketActivity.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/locale/zh_CN';
 import {$queryAllUsers} from "../../api/adminApi";
-import {$insertActivity, $qryActivityPage} from "../../api/activityApi";
+import {$deleteActivity, $insertActivity, $qryActivityPage} from "../../api/activityApi";
 import MyNOtification from "../../components/notification/MyNOtification";
 import UpdateActivityModal from "./UpdateActivityModal";
 
@@ -85,7 +85,7 @@ const MarketActivity = () => {
 
         const result = await $qryActivityPage(qryObj)
         if(result.message === '成功') {
-            result.data.activityPage.map((item) => {
+            result?.data?.activityPage?.map((item) => {
                 item.key = item.id
             })
             setActivityData(result.data.activityPage)
@@ -138,8 +138,8 @@ const MarketActivity = () => {
         createForm.setFieldsValue(initialFormValues);
     }
 
-    const handleActivityPagination = (page, pageSize) => {
-        activityPagination(page, pageSize)
+    const handleActivityPagination = async (page, pageSize) => {
+        await activityPagination(page, pageSize)
     }
 
     const rowSelection = {
@@ -155,6 +155,23 @@ const MarketActivity = () => {
 
     const closeUpdateModal = () => {
         setIsUpdateOpen(false)
+    }
+
+    const deleteActivity = async () => {
+        const qryMap = selectRecord[0]
+        const result = await $deleteActivity(qryMap)
+        if(result.message === '成功') {
+            setNotiMsg({
+                type: 'success',
+                description: '删除成功'
+            })
+        } else {
+            setNotiMsg({
+                type: 'error',
+                description: '删除失败'
+            })
+        }
+        await activityPagination(1, 10)
     }
 
     return (
@@ -204,7 +221,7 @@ const MarketActivity = () => {
                         <Button type="primary" htmlType="button" onClick={updateModal}>
                             修改
                         </Button>
-                        <Button type="primary" htmlType="button" >
+                        <Button type="primary" htmlType="button" onClick={deleteActivity}>
                             删除
                         </Button>
                     </div>

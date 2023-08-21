@@ -14,3 +14,8 @@ export const $updateActivity = async (updateInfo) => {
     let {data} = await axios.post('updateActivity', updateInfo)
     return data
 }
+
+export const $deleteActivity = async (qryMap) => {
+    let {data} = await axios.post('deleteActivity', qryMap)
+    return data
+}

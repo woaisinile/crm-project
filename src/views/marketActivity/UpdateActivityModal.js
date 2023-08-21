@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Button, DatePicker, Form, Input, message, Modal, Select} from "antd";
 import MyNOtification from "../../components/notification/MyNOtification";
-import {$updateActivity} from "../../api/activityApi";
+import {$insertActivity, $updateActivity} from "../../api/activityApi";
 
 function UpdateActivityModal(props){
 
@@ -17,6 +17,17 @@ function UpdateActivityModal(props){
         values.id = props.selectReord[0].id
         console.log(values)
         const result = $updateActivity(values)
+        if(result.message === '成功') {
+            setNotiMsg({
+                type: 'success',
+                description: '更新成功'
+            })
+        } else {
+            setNotiMsg({
+                type: 'error',
+                description: '更新失败'
+            })
+        }
     }
 
     useEffect(() => {
