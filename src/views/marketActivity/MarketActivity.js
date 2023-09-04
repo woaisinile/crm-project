@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Button, ConfigProvider, DatePicker, Form, Input, Modal, Pagination, Select, Table} from "antd";
+import {Button, ConfigProvider, DatePicker, Form, Input, message, Modal, Pagination, Select, Table, Upload} from "antd";
 import './MarketActivity.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/locale/zh_CN';
 import {$queryAllUsers} from "../../api/adminApi";
-import {$deleteActivity, $insertActivity, $qryActivityPage} from "../../api/activityApi";
+import {$deleteActivity, $importActivity, $insertActivity, $qryActivityPage} from "../../api/activityApi";
 import MyNOtification from "../../components/notification/MyNOtification";
 import UpdateActivityModal from "./UpdateActivityModal";
+import {UploadOutlined} from "@ant-design/icons";
 
 const MarketActivity = () => {
 
@@ -34,6 +35,8 @@ const MarketActivity = () => {
     const [loading, setLoading] = useState(false);
     const [selectRecord, setSelectRecord] = useState([]);
     const selectionType = 'radio'
+    // 上传文件
+    const [file, setFile] = useState(null)
 
     const columns = [
         {
@@ -174,6 +177,38 @@ const MarketActivity = () => {
         await activityPagination(1, 10)
     }
 
+    const handleFileUpload = async () => {
+        if (!file) {
+            message.error('请选择要上传的文件');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file)
+
+        let rsp = await $importActivity(formData);
+        debugger
+
+        if(rsp.message === '成功') {
+            setNotiMsg({
+                type: 'success',
+                description: '上传成功'
+            })
+        } else {
+            setNotiMsg({
+                type: 'error',
+                description: '上传失败'
+            })
+        }
+    }
+
+    const uploadProps = {
+        beforeUpload: (file) => {
+            setFile(file);
+            return false;
+        }
+    }
+
     return (
         <ConfigProvider locale={locale}>
             <div>
@@ -227,7 +262,10 @@ const MarketActivity = () => {
                     </div>
 
                     <div>
-                        <Button type="primary" htmlType="button" >
+                        <Upload {...uploadProps}>
+                            <Button icon={<UploadOutlined />}>选择文件</Button>
+                        </Upload>
+                        <Button type="primary" onClick={handleFileUpload} >
                             上传列表数据（导入）
                         </Button>
                         <Button type="primary" htmlType="button" >
