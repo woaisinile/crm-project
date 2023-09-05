@@ -4,7 +4,13 @@ import './MarketActivity.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/locale/zh_CN';
 import {$queryAllUsers} from "../../api/adminApi";
-import {$deleteActivity, $importActivity, $insertActivity, $qryActivityPage} from "../../api/activityApi";
+import {
+    $deleteActivity,
+    $exportActivity,
+    $importActivity,
+    $insertActivity,
+    $qryActivityPage
+} from "../../api/activityApi";
 import MyNOtification from "../../components/notification/MyNOtification";
 import UpdateActivityModal from "./UpdateActivityModal";
 import {UploadOutlined} from "@ant-design/icons";
@@ -209,6 +215,24 @@ const MarketActivity = () => {
         }
     }
 
+    const handleExport = async ()=>{
+        try {
+            const data = await $exportActivity();
+            // 创建一个虚拟的下载链接
+            const blob = new Blob([data], { type: 'application/octet-stream' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'activity_data.xlsx'; // 设置下载文件的名称
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            message.info('导出成功')
+        } catch (err) {
+            message.error('导出失败')
+        }
+    }
+
     return (
         <ConfigProvider locale={locale}>
             <div>
@@ -268,7 +292,7 @@ const MarketActivity = () => {
                         <Button type="primary" onClick={handleFileUpload} >
                             上传列表数据（导入）
                         </Button>
-                        <Button type="primary" htmlType="button" >
+                        <Button type="primary" onClick={handleExport} >
                             下载列表数据（批量导出）
                         </Button>
                         <Button type="primary" htmlType="button" >

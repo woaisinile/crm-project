@@ -24,3 +24,8 @@ export const $importActivity = async (qryMap) => {
     let {data} = await axios.post('importActivity', qryMap)
     return data
 }
+
+export const $exportActivity = async ()=> {
+    let {data} = await axios.get('exportActivity', { responseType: 'blob' })
+    return data
+}
