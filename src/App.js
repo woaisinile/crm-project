@@ -10,8 +10,9 @@ function App() {
     <BrowserRouter>
       <Routes>
           <Route path={'/'} element={<Login/>}/>
-          <Route path={'main-layout'} element={<MainLayout/>}/>
-          <Route path={'market-activity'} element={<MarketActivity/>} />
+          <Route path={'main-layout'} element={<MainLayout/>}>
+              <Route path={'market-activity'} element={<MarketActivity/>} />
+          </Route>
       </Routes>
     </BrowserRouter>
   );

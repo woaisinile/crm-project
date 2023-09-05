@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import './MainLayout.css'
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, Outlet, useLocation, useNavigate} from 'react-router-dom'
 
 const {
     Header,
@@ -117,12 +117,16 @@ const MainLayout: React.FC = () => {
 
     // 顶部菜单栏选中状态
     const [current, setCurrent] = useState('mail');
+    // 获取路由传递过来的值,保存登录用户的值
+    const location = useLocation();
+    const user = location?.state?.result;
 
     const clickMenu = (e) => {
         setCurrent(e.key)
         switch (e.key){
             case 'marketActivity':
-                navigate('/market-activity')
+                console.log('user', user)
+                navigate('/main-layout/market-activity')
                 break
             case 'exit':
                 sessionStorage.clear();
@@ -170,7 +174,7 @@ const MainLayout: React.FC = () => {
                         background: colorBgContainer,
                     }}
                 >
-                    主页面内容
+                    <Outlet />
                 </Content>
             </Layout>
         </Layout>

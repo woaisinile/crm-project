@@ -24,7 +24,7 @@ export default function Login(){
                     type: 'success',
                     description: result.message
                 })
-                navigate('/main-layout')
+                navigate('/main-layout', {state: {result}})
             } else {
                 setNotiMsg({
                     type: 'error',
